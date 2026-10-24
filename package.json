@@ -1,0 +1,35 @@
+{
+  "name": "flecsjs",
+  "private": true,
+  "main": "dist/index.mjs",
+  "types": "dist/index.d.mts",
+  "files": [
+    "dist/index.mjs",
+    "dist/index.d.mts"
+  ],
+  "type": "module",
+  "scripts": {
+    "build:native": "emcmake cmake -S ./native -B ./build -DCMAKE_BUILD_TYPE=Release && cmake --build build",
+    "build:native:debug": "emcmake cmake -S ./native -B ./build -DCMAKE_BUILD_TYPE=Debug && cmake --build build",
+    "build": "tsdown",
+    "test": "pnpm build:native:debug && vitest run",
+    "unit": "vitest --project unit --ui --api.port 51204"
+  },
+  "dependencies": {
+    "zod": "^4"
+  },
+  "devDependencies": {
+    "@types/node": "^26",
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "@vitest/coverage-v8": "^4",
+    "@vitest/ui": "^4",
+    "jest-extended": "^7.0.0",
+    "oxlint": "^1.80.0",
+    "oxlint-tsgolint": "^7.0.2001",
+    "playwright": "^1",
+    "tsdown": "^0.23.0",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4"
+  }
+}
