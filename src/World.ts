@@ -17,15 +17,31 @@ export type NativeFunctionName<M> = {
 }[keyof M] &
   string;
 
+// Safety net: frees native worlds that were dropped without being disposed.
+const finalizer = new FinalizationRegistry<BackendWorld>((backend) =>
+  backend.delete(),
+);
+
 export class World<M extends FlecsModule = FlecsModule> {
   private backend: BackendWorld;
+  private deleted = false;
 
   constructor(private mainModule: M) {
     this.backend = new mainModule.World();
+    // The registry must not reference `this`, so it only holds the native handle.
+    finalizer.register(this, this.backend, this);
   }
 
+  /** Frees the native world. Optional: `using world = new World()` or garbage collection also do it. */
   delete() {
+    if (this.deleted) return;
+    this.deleted = true;
+    finalizer.unregister(this);
     this.backend.delete();
+  }
+
+  [Symbol.dispose]() {
+    this.delete();
   }
 
   progress(deltaTimeMs: number) {

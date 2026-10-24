@@ -13,7 +13,7 @@
     "build:native:debug": "emcmake cmake -S ./native -B ./build -DCMAKE_BUILD_TYPE=Debug && cmake --build build",
     "build": "tsdown",
     "test": "pnpm build:native:debug && vitest run",
-    "unit": "vitest --project unit --ui --api.port 51204"
+    "unit": "pnpm build:native:debug && vitest --project unit --ui --api.port 51204"
   },
   "dependencies": {
     "zod": "^4"
